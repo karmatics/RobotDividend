@@ -1,0 +1,27 @@
+{
+  "name": "RobotDividend",
+  "version": "1.0.0",
+  "description": "The Robot Dividend - Interactive Multi-Variant Article & Essay Engine",
+  "type": "luno-web-app",
+  "mainClass": "RobotDividend",
+  "entrypoint": {
+    "file": "js/RobotDividend.js",
+    "class": "RobotDividend",
+    "method": "run"
+  },
+  "main": [
+    "js/ArticleContent.js",
+    "js/RobotDividend.js"
+  ],
+  "library": [
+    "DomBasics.js",
+    "UITools.js"
+  ],
+  "styles": [
+    "css/robotDividend.css"
+  ],
+  "processedCountSinceCheckpoint": 0,
+  "changedMethods": {},
+  "lastCheckpointTime": "2026-08-25T10:00:00.000Z",
+  "pendingCheckpointDescription": "RobotDividend verified structure"
+}

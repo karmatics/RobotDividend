@@ -1,0 +1,12 @@
+{
+  "main": [
+    "js/ArticleContent.js",
+    "js/RobotDividend.js"
+  ],
+  "local": [],
+  "library": [
+    "DomBasics.js",
+    "UITools.js"
+  ],
+  "thirdParty": []
+}
