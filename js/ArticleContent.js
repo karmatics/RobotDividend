@@ -74,25 +74,25 @@ class ArticleContent {
   }
 
   static p_dozen_5() {
-      return [
-        "Of course not — because the robots don't just replace their labor, they amplify it. Machines work faster and longer than human muscles ever could. Within weeks, the colony has sturdier houses, more varied and plentiful crops, and fresh amenities they never had time to build before. The twelve now enjoy a true surplus: better food, warmer homes, and endless free afternoons to read, hike, explore, or sit together around a meal none of them had to prepare.",
-        "Not at all. In fact, their standard of living rises immediately. Because the automatons work faster, stronger, and without getting tired, they produce far more than twelve humans ever managed alone. The colony ends up with better homes, expanded gardens, and reliable stockpiles. Instead of scraping by on subsistence, the settlers now have an outright abundance—and all the leisure time in the world to enjoy it.",
-        "Far from it. The automatons quickly turn the settlement from 'getting by' into outright thriving. Working at machine speed, they mill more timber for roomier housing, cultivate richer harvests, and generate an immediate surplus. The colonists have higher-quality food, nicer quarters, and complete control over their waking hours."
-      ];
-    }
-
+    return [
+      "Of course not — because the real breakthrough of the robots isn't just that they produce more stuff; it's that the colonists no longer have to work. For the first time, survival is completely decoupled from sweat. Yes, the machines mill sturdier lumber, plant larger fields, and build better homes at machine speed. But the profound transformation is human freedom: the twelve colonists don't have to spend their waking hours toiling just to stay alive. Their time is entirely their own. They can read, explore, study, craft, or simply spend endless sunny afternoons together doing whatever they want.",
+      "Not at all. While having more food and sturdier habitations is great, the true miracle of the machines is much simpler: people no longer have to work. Compulsory labor vanishes overnight. Because autonomous utility units handle the plowing, hauling, maintenance, and cooking, the settlers are freed from the daily grind of survival. The defining gift of automation isn't just a bigger pile of goods—it is total sovereignty over their own time.",
+      "Far from it. Extra grain and roomier housing are welcome benefits, but they miss the real point: the machines eliminate the need for human labor entirely. No one has to chop wood in the freezing rain or spend dawn-to-dusk pulling weeds just to earn the right to eat. The work is done, survival is guaranteed, and the colonists are finally free to spend their lives doing whatever they choose."
+    ];
+  }
   static fig_dozen() {
       return [
         "Fig. 1: Twelve colonists, a surplus harvest, and utility robots stepping off the cargo pod.",
         "Fig. 1: Machine speed transforms the homestead: larger houses, plentiful food, and zero required chores."
       ];
     }
+
   static p_dozen_6() {
     return [
-      "This is the whole argument in miniature: work has never been the point. It's a means — a cost paid to get things people actually want: food, shelter, comfort, time with people they care about. When a machine can pay that cost instead of a person, nothing of value is lost. Something is gained."
+      "This is the core insight: work was never the ultimate goal of human existence; it was merely the price of admission to stay alive. When machines pay that price for us, we don't lose our livelihood—we gain our lives. The arrival of automated labor means nobody has to work anymore unless they genuinely choose to.",
+      "Work has always been a means to an end—a tax paid in sweat to secure food, shelter, and comfort. When automatons pay that tax instead of people, nothing of human value is destroyed. What is gained is the rarest commodity in human history: the freedom to spend your days doing whatever you want."
     ];
   }
-
   // Section 3: Part Two - The Hundred
   static p_hundred_1() {
     return [
@@ -124,13 +124,12 @@ class ArticleContent {
     }
 
   static p_hundred_4() {
-      return [
-        "Notice what this currency actually represents. The Credit isn't wealth by itself — you can't eat timber or accounting balance sheets. It is a proof-of-work certificate redeemable for real colony output. Before automation, this system is strict: if you don't contribute labor, you don't earn Credits, and without Credits you can't buy food or shelter. Because human effort is still the engine keeping everyone alive, the Credit transparently reflects that trade-off.",
-        "The Credit acts as a claim check on the community's combined output. Because robots haven't arrived yet, every bushel of oats and every cut timber demands human sweat. If you don't work, you don't collect Credits, which means you cannot buy supper. The currency merely enforces the arithmetic of an unautomated world: no labor, no goods.",
-        "At this stage, the Credit is an honest mirror of human effort. It guarantees that anyone who takes from the communal granary or timber stack has deposited an equivalent amount of useful work. It functions cleanly like a dollar bill, rationing scarce human time."
-      ];
-    }
-
+    return [
+      "Notice why this currency standard works. Unlike gold, which carries value mostly because everyone agrees it does, milled lumber has immediate, intrinsic utility: you can always use a standard 2×4 to frame an extra room, shore up a storm wall, or build furniture. The Credit isn't an abstract fiction; it is directly redeemable for something eminently useful on the frontier. At the same time, it serves as an honest claim check on the colony's combined output. Before automation, this system is strict: if you don't contribute labor, you don't earn Credits, and without Credits you can't draw on community resources.",
+      "The Credit is anchored in real, tangible utility. Unlike gold—which holds value largely by convention—a standard 2×4 board has unmistakable practical worth: it directly builds shelter, fences, and tools. Anyone holding a Credit holds a guarantee for something undeniably useful in the settlement. In an unautomated colony, this makes the ledger airtight: every unit of lumber and grain demands human sweat, so earning Credits requires contributing work.",
+      "Choosing milled lumber anchors the economy in something with genuine, practical value. A 2×4 isn't like gold, whose worth relies on shared belief; it is something you can immediately use to build a roof over your head. The Credit is a promise backed by physical utility. Before machines arrive, that standard enforces reality: without labor, nothing gets built, so access to the colony's bounty must be earned with work."
+    ];
+  }
   static p_trans_1() {
       return [
         "Then a cargo pod touches down carrying an automated workforce, but only enough units to handle about half the colony's total labor. The machines take over the heaviest tasks: clearing land, felling trees, and rough framing. But between limited machinery and nuanced jobs that require human dexterity, plenty of work remains across the settlement.",

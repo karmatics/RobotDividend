@@ -1,4 +1,5 @@
 class RobotDividend {
+
   async run(env) {
     if (!env || !env.container) {
       throw new Error("[RobotDividend] run() requires an environment object with a valid container.");
@@ -7,15 +8,45 @@ class RobotDividend {
     this.container = env.container;
     this.activeVariants = {};
     this.selectedBlockId = null;
+    this.assistantDialog = null;
+
+    // Restore preferred theme
+    const savedTheme = localStorage.getItem("robot_dividend_theme") || "light";
+    if (savedTheme === "dark") {
+      document.body.classList.add("theme-dark");
+    } else {
+      document.body.classList.remove("theme-dark");
+    }
 
     this.initUI();
     this.renderArticle();
-    this.setupAssistantDialog();
   }
 
   initUI() {
     this.container.innerHTML = "";
 
+    // Floating Navigation Bar
+    this.navBar = makeElement("nav", { className: "reader-nav-bar" }, [
+      ["div", { className: "reader-nav-brand" }, [
+        ["span", {}, "⚡"],
+        ["span", {}, "The Robot Dividend"]
+      ]],
+      ["div", { className: "reader-nav-actions" }, [
+        ["button", {
+          className: "nav-btn",
+          title: "Toggle Light / Dark reading palette",
+          onclick: () => this.toggleTheme()
+        }, "🌓 Theme"],
+        ["button", {
+          className: "nav-btn primary",
+          title: "Export formatted essay for Quora or publication",
+          onclick: () => this.showExportDialog()
+        }, "📤 Export for Quora"]
+      ]]
+    ]);
+    document.body.appendChild(this.navBar);
+
+    // Progress Bar
     this.progressTrack = makeElement("div", { className: "reading-progress-track" });
     this.progressBar = makeElement("div", { className: "reading-progress-bar" });
     this.progressTrack.appendChild(this.progressBar);
@@ -35,7 +66,6 @@ class RobotDividend {
     this.shell.appendChild(this.articleContainer);
     this.container.appendChild(this.shell);
   }
-
   renderArticle() {
     this.articleContainer.innerHTML = "";
     const meta = ArticleContent.getMeta();
@@ -93,65 +123,90 @@ class RobotDividend {
 
     wrapper.appendChild(contentEl);
 
-    const strip = makeElement("div", { className: "variant-strip" });
-    const label = makeElement("span", { style: { color: "#94a3b8", fontWeight: "600" } }, `#${blockId}`);
-    strip.appendChild(label);
+    // Subtle Gutter Controls: sits in the right margin so it adds ZERO vertical height
+    const gutterControls = makeElement("div", { className: "block-gutter-controls" });
 
     if (variants.length > 1) {
+      const vCol = makeElement("div", { className: "gutter-v-col" });
       variants.forEach((_, idx) => {
-        const badge = makeElement("span", {
-          className: `variant-badge ${idx === currentIdx ? "active" : ""}`,
+        const badge = makeElement("button", {
+          className: `gutter-v-badge ${idx === currentIdx ? "active" : ""}`,
+          title: `Switch to variant ${idx + 1}`,
           onclick: (e) => {
             e.stopPropagation();
             this.activeVariants[blockId] = idx;
             this.renderArticle();
-            if (this.assistantDialog) this.updateAssistant(blockId);
+            if (this.assistantDialog && this.assistantDialog.element?.isConnected) {
+              this.updateAssistant(blockId);
+            }
           }
-        }, `v${idx + 1}`);
-        strip.appendChild(badge);
+        }, `${idx + 1}`);
+        vCol.appendChild(badge);
       });
+      gutterControls.appendChild(vCol);
     }
 
+    // Edit studio popup trigger
     const inspectBtn = makeElement("button", {
-      className: "block-inspect-btn",
+      className: "gutter-inspect-btn",
+      title: `Edit & AI studio for #${blockId}`,
       onclick: (e) => {
         e.stopPropagation();
-        this.selectBlock(blockId);
+        this.selectBlock(blockId, true);
       }
-    }, "Edit / AI Prompt");
-    strip.appendChild(inspectBtn);
+    }, "✎");
+    gutterControls.appendChild(inspectBtn);
 
-    wrapper.appendChild(strip);
+    // Monospace method anchor tooltip visible strictly on hovering the gutter controls
+    const idTip = makeElement("span", {
+      className: "gutter-id-tip"
+    }, `#${blockId}`);
+    gutterControls.appendChild(idTip);
+
+    wrapper.appendChild(gutterControls);
 
     wrapper.addEventListener("click", () => {
-      this.selectBlock(blockId);
+      this.selectBlock(blockId, true);
     });
 
     return wrapper;
   }
-
-  selectBlock(blockId) {
+  selectBlock(blockId, openDialog = false) {
     this.selectedBlockId = blockId;
     document.querySelectorAll(".block-wrapper").forEach((el) => el.classList.remove("block-selected"));
     const el = document.getElementById(`block-${blockId}`);
     if (el) el.classList.add("block-selected");
-    this.updateAssistant(blockId);
+
+    if (openDialog) {
+      this.setupAssistantDialog(blockId);
+    } else if (this.assistantDialog && this.assistantDialog.element?.isConnected) {
+      this.updateAssistant(blockId);
+    }
   }
 
-  setupAssistantDialog() {
+  setupAssistantDialog(blockId = "p_scarcity_1") {
+    // If dialog exists and is alive on screen, merely bring to front and refresh content
+    if (this.assistantDialog && this.assistantDialog.element && this.assistantDialog.element.isConnected) {
+      this.assistantDialog.bringToFront();
+      this.updateAssistant(blockId);
+      return;
+    }
+
     this.assistantContent = makeElement("div", { style: { padding: "4px" } });
 
     this.assistantDialog = UITools.makeDialog({
       appendTo: document.body,
       title: "AI Editing Studio & Variant Manager",
-      size: [390, 500],
-      position: [Math.max(20, window.innerWidth - 430), 40],
-      contentElement: this.assistantContent
+      size: [410, 520],
+      position: [Math.max(20, window.innerWidth - 440), 68],
+      contentElement: this.assistantContent,
+      onClose: () => {
+        this.assistantDialog = null;
+      }
     });
 
-    this.updateAssistant("p_scarcity_1");
+    this.updateAssistant(blockId);
   }
-
   updateAssistant(blockId) {
     if (!this.assistantContent) return;
     this.assistantContent.innerHTML = "";
@@ -274,9 +329,144 @@ static ${blockId}() {
     if (this.progressTrack && this.progressTrack.parentNode) {
       this.progressTrack.remove();
     }
+    if (this.navBar && this.navBar.parentNode) {
+      this.navBar.remove();
+    }
     if (this.assistantDialog && typeof this.assistantDialog.close === "function") {
       this.assistantDialog.close();
+      this.assistantDialog = null;
     }
+  }
+  toggleTheme() {
+    const isDark = document.body.classList.toggle("theme-dark");
+    localStorage.setItem("robot_dividend_theme", isDark ? "dark" : "light");
+  }
+
+  showExportDialog() {
+    const meta = ArticleContent.getMeta();
+    const manifest = ArticleContent.manifest();
+
+    // Generate clean, simple HTML tailored for Quora's rich-text limits
+    const htmlParts = [];
+    htmlParts.push(`<h2>${meta.title}</h2>`);
+    htmlParts.push(`<p><em>${meta.subtitle}</em></p>`);
+
+    manifest.forEach((sec) => {
+      if (sec.partLabel) {
+        htmlParts.push(`<h3>${sec.partLabel}: ${sec.title}</h3>`);
+      } else {
+        htmlParts.push(`<h3>${sec.title}</h3>`);
+      }
+
+      sec.blocks.forEach((b) => {
+        const variants = (typeof ArticleContent[b.id] === "function") ? ArticleContent[b.id]() : [];
+        const idx = this.activeVariants[b.id] || 0;
+        const text = variants[idx] || variants[0] || "";
+
+        if (b.type === "quote") {
+          htmlParts.push(`<blockquote><p>${text}</p></blockquote>`);
+        } else if (b.type === "figure") {
+          htmlParts.push(`<p><strong>[${b.icon || "Figure"}: ${text}]</strong></p>`);
+        } else {
+          htmlParts.push(`<p>${text}</p>`);
+        }
+      });
+    });
+
+    const simpleHtml = htmlParts.join("\n");
+
+    // Create plain text fallback
+    const plainText = simpleHtml
+      .replace(/<h2>(.*?)<\/h2>/g, "$1\n\n")
+      .replace(/<h3>(.*?)<\/h3>/g, "$1\n\n")
+      .replace(/<blockquote><p>(.*?)<\/p><\/blockquote>/g, "> $1\n\n")
+      .replace(/<p><em>(.*?)<\/em><\/p>/g, "$1\n\n")
+      .replace(/<p><strong>(.*?)<\/strong><\/p>/g, "$1\n\n")
+      .replace(/<p>(.*?)<\/p>/g, "$1\n\n");
+
+    let showingCode = false;
+
+    const previewBox = makeElement("div", {
+      className: "export-rendered-preview",
+      innerHTML: simpleHtml
+    });
+
+    const codeBox = makeElement("textarea", {
+      className: "export-code-view",
+      readonly: "true",
+      value: simpleHtml
+    });
+
+    const toggleBtn = makeElement("button", {
+      className: "uw-btn",
+      onclick: () => {
+        showingCode = !showingCode;
+        if (showingCode) {
+          previewBox.style.display = "none";
+          codeBox.style.display = "block";
+          toggleBtn.textContent = "👁️ Show Formatted Preview";
+        } else {
+          codeBox.style.display = "none";
+          previewBox.style.display = "block";
+          toggleBtn.textContent = "📄 View Simple HTML Code";
+        }
+      }
+    }, "📄 View Simple HTML Code");
+
+    const copyRichBtn = makeElement("button", {
+      className: "uw-btn primary",
+      onclick: (e) => {
+        const btn = e.currentTarget;
+        if (navigator.clipboard && window.ClipboardItem) {
+          const htmlBlob = new Blob([simpleHtml], { type: "text/html" });
+          const textBlob = new Blob([plainText], { type: "text/plain" });
+          navigator.clipboard.write([
+            new ClipboardItem({
+              "text/html": htmlBlob,
+              "text/plain": textBlob
+            })
+          ]).then(() => {
+            btn.textContent = "✓ Copied! Paste directly in Quora";
+            setTimeout(() => { btn.textContent = "📋 Copy for Quora (Direct Paste)"; }, 2500);
+          }).catch(() => {
+            this._fallbackCopy(simpleHtml, btn);
+          });
+        } else {
+          this._fallbackCopy(simpleHtml, btn);
+        }
+      }
+    }, "📋 Copy for Quora (Direct Paste)");
+
+    const dialogContent = makeElement("div", { className: "export-container" }, [
+      ["p", { className: "export-desc" }, 
+        "Formatted with basic HTML headers, italics, and blockquotes compatible with Quora's rich-text editor. Click 'Copy for Quora' and press Ctrl+V / Cmd+V directly into Quora."
+      ],
+      ["div", { className: "export-view-container" }, [
+        previewBox,
+        codeBox
+      ]],
+      ["div", { className: "export-footer-bar" }, [
+        toggleBtn,
+        copyRichBtn
+      ]]
+    ]);
+
+    UITools.makeDialog({
+      appendTo: document.body,
+      title: "Export for Quora & Publications",
+      size: [600, 520],
+      position: [Math.max(20, Math.floor(window.innerWidth / 2 - 300)), 70],
+      contentElement: dialogContent
+    });
+  }
+
+  _fallbackCopy(text, btn) {
+    navigator.clipboard.writeText(text).then(() => {
+      if (btn) {
+        btn.textContent = "✓ HTML Copied!";
+        setTimeout(() => { btn.textContent = "📋 Copy for Quora (Direct Paste)"; }, 2500);
+      }
+    });
   }
 }
 
