@@ -66,38 +66,50 @@ class RobotDividend {
     this.shell.appendChild(this.articleContainer);
     this.container.appendChild(this.shell);
   }
+
   renderArticle() {
-    this.articleContainer.innerHTML = "";
-    const meta = ArticleContent.getMeta();
+      this.articleContainer.innerHTML = "";
+      const meta = ArticleContent.getMeta();
+      const manifest = ArticleContent.manifest();
 
-    const header = makeElement("header", { className: "article-header" }, [
-      ["div", { className: "article-meta-row" }, [
-        ["span", { className: "article-kicker" }, meta.kicker],
-        ["span", { className: "article-read-time" }, "7 min read"]
-      ]],
-      ["h1", { className: "article-title" }, meta.title],
-      ["p", { className: "article-subtitle" }, meta.subtitle]
-    ]);
-    this.articleContainer.appendChild(header);
-
-    const manifest = ArticleContent.manifest();
-    manifest.forEach((sec) => {
-      const secWrap = makeElement("section", { className: "section-divider" });
-
-      if (sec.partLabel) {
-        secWrap.appendChild(makeElement("div", { className: "section-part-label" }, sec.partLabel));
-      }
-      secWrap.appendChild(makeElement("h2", { className: "section-heading" }, sec.title));
-
-      sec.blocks.forEach((b) => {
-        const blockEl = this.renderBlock(b);
-        secWrap.appendChild(blockEl);
+      // Dynamically calculate word count and estimated reading time based on active variants
+      let totalWords = 0;
+      manifest.forEach((sec) => {
+        sec.blocks.forEach((b) => {
+          const variants = (typeof ArticleContent[b.id] === "function") ? ArticleContent[b.id]() : [];
+          const curIdx = this.activeVariants[b.id] || 0;
+          const txt = variants[curIdx] || variants[0] || "";
+          totalWords += txt.split(/\s+/).filter(Boolean).length;
+        });
       });
+      const estMinutes = Math.max(1, Math.round(totalWords / 220));
 
-      this.articleContainer.appendChild(secWrap);
-    });
-  }
+      const header = makeElement("header", { className: "article-header" }, [
+        ["div", { className: "article-meta-row" }, [
+          ["span", { className: "article-kicker" }, meta.kicker],
+          ["span", { className: "article-read-time" }, `${estMinutes} min read`]
+        ]],
+        ["h1", { className: "article-title" }, meta.title],
+        ["p", { className: "article-subtitle" }, meta.subtitle]
+      ]);
+      this.articleContainer.appendChild(header);
 
+      manifest.forEach((sec) => {
+        const secWrap = makeElement("section", { className: "section-divider" });
+
+        if (sec.partLabel) {
+          secWrap.appendChild(makeElement("div", { className: "section-part-label" }, sec.partLabel));
+        }
+        secWrap.appendChild(makeElement("h2", { className: "section-heading" }, sec.title));
+
+        sec.blocks.forEach((b) => {
+          const blockEl = this.renderBlock(b);
+          secWrap.appendChild(blockEl);
+        });
+
+        this.articleContainer.appendChild(secWrap);
+      });
+    }
   renderBlock(blockDef) {
     const blockId = blockDef.id;
     const variants = (typeof ArticleContent[blockId] === "function") ? ArticleContent[blockId]() : ["[Missing block]"];
