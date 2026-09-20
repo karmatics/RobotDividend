@@ -201,109 +201,145 @@ class ArticleContent {
 
   static quote_abundance() {
     return [
-      "The arrival of machines never once creates scarcity. Every single time, it creates a surplus."
+      "The arrival of machines should never make anyone's life worse. When machines produce more, every individual's baseline should rise, never fall.",
+      "Automation should never leave a single person worse off than before. More goods made with less human toil should elevate individual lives, not diminish them.",
+      "A technology that multiplies real wealth has no business making any individual's life harder. If machines do the work, everyone's life should be better or at least equal."
     ];
   }
 
   static p_conc_1() {
-      return [
-        "Run the thought experiment back — from twelve colonists to a hundred, and from a hundred who must all work to a hundred whose robots do everything — and one thing stays constant the whole way through: the arrival of machines never once creates scarcity. Every time, it creates a surplus. It's not a question of whether the math adds up, because the math obviously does. When physical production multiplies, the total wealth of the community multiplies with it.",
-        "Trace the progression from start to finish: automation never subtracts from physical reality; it multiplies it. The machine does not manufacture famine; it produces an abundance. The question is never whether the underlying math balances, because the math is undeniable: when you have more food, more housing, and more power produced than ever before, the society is indisputably wealthier.",
-        "Across both settlements, the lesson is identical: machines do not destroy wealth, they generate an outright surplus. Anyone asking whether the math works out is looking at the wrong ledger. The physical math is absolute: when machines produce twice as much in half the time, the abundance is real, tangible, and ready for distribution."
-      ];
-    }
+    return [
+      "Run the thought experiment back — from twelve colonists to a hundred, and from a hundred who must all work to a hundred whose robots do everything — and one principle holds firm: the arrival of machines never has to make a single individual's life worse. Machines do not create scarcity; they multiply real physical output. If an individual's quality of life falls simply because their old tasks were automated, that isn't an unavoidable consequence of technology—it is an artificial failure to update how the bounty is distributed. When physical production multiplies, everyone's standard of living can be better or at least equal, never worse.",
+      "Trace the progression from start to finish: automation never has to leave anyone worse off. The machine does not manufacture hardship; it multiplies physical abundance. There is no legitimate reason for an individual to face poverty simply because mechanical hands took over their shifts while the community's silos overflow. In an automated society, no citizen's standard of living should decline—their baseline security should be guaranteed, with every path open to thrive.",
+      "Across both settlements, the lesson is identical: the arrival of automated labor should never leave any person worse off than before. Machines do not destroy wealth; they generate an outright surplus. A system that allows mechanical productivity to cause personal ruin is a failure of bookkeeping and distribution, not an economic reality. When physical production surges, every individual's quality of life should rise alongside it."
+    ];
+  }
+
   static p_conc_2() {
-      return [
-        "Poverty in an automated world isn't an engineering failure — production is at an all-time high. It is an accounting failure: refusing to update the ledger to reflect the mountain of goods sitting in the depot. The colonists who solved this didn't tell the machines to slow down. They simply decided that everyone was entitled to enjoy the fruits of what the machines produced.",
-        "Deprivation amid automated machinery is never a shortage of stuff; it is an outdated rulebook. When automated factories and farms run around the clock, abundance is already a physical fact. The only real step the pioneers had to take was recognizing that the community as a whole should reap the fruits of mechanical labor, rather than locking the warehouses until someone showed up with a timecard.",
-        "A society that starves in front of automated granaries suffers from an intellectual confusion, not a material deficit. You do not need to invent busywork to justify feeding people when machines are already doing the heavy lifting. You simply update the distribution system so every citizen enjoys the fruits of automated production."
-      ];
-    }
+    return [
+      "Poverty in an automated world isn't an engineering failure — production is at an all-time high. It is a distribution failure: refusing to update the ledger to reflect the mountain of goods sitting in the depot, or allowing the surplus to be hoarded while former workers go without. The colonists who solved this didn't tell the machines to slow down. They recognized that mechanical labor belongs to the whole community, ensuring that nobody's life is degraded when machines take over their chores.",
+      "Deprivation amid automated machinery is never a shortage of stuff; it is an outdated rulebook. When automated factories and farms run around the clock, abundance is already a physical fact. Letting individuals suffer because their labor is no longer required is purely an institutional defect. The pioneers solved this by ensuring the community as a whole reaped the fruits of mechanical labor, guaranteeing that no one's standard of living fell when the machines took over.",
+      "A society where citizens struggle to survive in front of automated granaries suffers from an accounting delusion, not a material deficit. You do not need to invent busywork to justify feeding and housing people when machines are already doing the heavy lifting. You simply update the distribution system so mechanical progress makes every individual's life better, never worse."
+    ];
+  }
 
   static p_conc_scope() {
-      return [
-        "Strip away the political labels—whether you call this UBI, a citizen dividend, or a negative income tax—and the core argument rests on three straightforward, checkable premises:\n\n1. Autonomous machines can produce real, physical goods and services.\n2. The net output of those machines (after accounting for their energy, maintenance, and capital costs) can exceed the baseline biological needs of the population.\n3. An economic system can issue accounting tokens representing claims on that net surplus.\n\nFor the conclusion to fail, one of those three premises must break. If machines genuinely produce an abundant net surplus of necessities, then deprivation among the unemployed is not an inevitable mathematical reality; it is an active choice in how we configure the ledger. Conceding this does not mean every complex problem is solved: real-world ownership structures, tax architecture, transitional disruptions, and the allocation of genuinely scarce positional goods (like beachfront land or unique art) remain difficult, open political questions. We will examine those institutional mechanisms in a companion paper. But the foundational baseline is clear: when machines do the producing, compulsory human labor can no longer be defended as a prerequisite for human survival.",
-        "Whether framed as UBI, Universal High Income, or a negative income tax, skeptics reflexively ask: 'Does the math actually add up?' Yes—the physical math indisputably does. If you have a hundred people, and automated machinery produces enough food, power, and shelter for two hundred, deprivation is an arithmetic impossibility unless your distribution ledger insists on manufacturing it. This does not mean automation eliminates every conceivable scarcity: beachfront property, original art, or front-row concert seats will always be limited. But we do not need to solve the allocation of luxury penthouses before guaranteeing that no one starves in front of an automated granary. How to construct the tax codes, transition schedules, and monetary plumbing for Earth will be explored in a companion paper. But the foundational premise must not be compromised: human beings should not be forced to justify their right to exist with compulsory labor when machines are already doing the work.",
-        "Whether you call this Universal Basic Income, Universal High Income, or a negative income tax, critics reflexively ask the same question: Does the math actually add up? As this thought experiment demonstrates, the fundamental math obviously does. We will dive into the specific policy levers, transition phases, and monetary mechanics for Earth in a subsequent document. But the essential baseline is established: we must let go of the reflex assumption that you need a job in order to get food, shelter, healthcare, gadgets, and comfort — especially when the entire reason you don't have a job is that the machines are already making them."
-      ];
-    }
+    return [
+      "Strip away the political labels—whether you call this UBI, a citizen dividend, or a negative income tax—and the core argument rests on three straightforward, checkable premises:\n\n1. Autonomous machines can produce real, physical goods and services.\n2. The net output of those machines (after accounting for their energy, maintenance, and capital costs) can exceed the baseline biological needs of the population.\n3. An economic system can issue accounting tokens representing claims on that net surplus.\n\nFor the conclusion to fail, one of those three premises must break. If machines genuinely produce an abundant net surplus of necessities, then deprivation among the unemployed is not an inevitable mathematical reality; it is an active choice in how we configure the ledger. Conceding this does not mean every complex problem is solved: real-world ownership structures, tax architecture, transitional disruptions, and the allocation of genuinely scarce positional goods (like beachfront land or unique art) remain difficult, open political questions. We will examine those institutional mechanisms in a companion paper. But the foundational baseline is clear: when machines do the producing, compulsory human labor can no longer be defended as a prerequisite for human survival.",
+      "Whether framed as UBI, a citizen dividend, or a negative income tax, the core proposition comes down to three testable realities:\n\n1. Automated systems can produce tangible goods and services.\n2. The net output of automation can comfortably exceed what the population requires to live well.\n3. A society can distribute purchasing tokens that represent direct claims on that surplus.\n\nIf those three hold true, no individual's life needs to get worse when machines replace their labor. Deprivation amid automated abundance is not an economic law; it is a policy choice. We do not need to solve the allocation of luxury beachfront villas before ensuring no one falls into poverty while automated harvesters work the fields. How to structure tax plumbing and transition phases on Earth will be explored in a companion paper, but the core baseline stands: no human should be forced to justify their right to a decent life with compulsory sweat when machines are already doing the heavy lifting.",
+      "Whether you call it Universal Basic Income, a Robot Dividend, or a negative income tax, critics always ask if the math works out. It hinges on three basic facts:\n\n1. Machines do real work and generate real physical output.\n2. That automated output can surpass the baseline survival needs of everyone in the community.\n3. The monetary system can distribute tokens so citizens can access that surplus.\n\nWhen all three are present, there is no mathematical reason for any individual's living standard to decline when machines take their job. A society that allows its people's lives to get worse while robots fill the depots is suffering from a failure of imagination and distribution, not a shortage of resources."
+    ];
+  }
   static manifest() {
-      return [
-        {
-          section: "scarcity",
-          title: "The scarcity illusion",
-          blocks: [
-            { id: "p_scarcity_1", type: "p" },
-            { id: "p_scarcity_2", type: "p" },
-            { id: "p_scarcity_3", type: "p" },
-            { id: "p_scarcity_4", type: "p" }
-          ]
-        },
-        {
-          section: "dozen",
-          partLabel: "Part One",
-          title: "The Dozen: pure abundance",
-          blocks: [
-            { id: "p_dozen_1", type: "p" },
-            { id: "p_dozen_2", type: "p" },
-            { id: "p_dozen_3", type: "p" },
-            { id: "p_dozen_4", type: "p" },
-            { id: "p_dozen_5", type: "p" },
-            { id: "fig_dozen", type: "figure", icon: "🤖" },
-            { id: "p_dozen_6", type: "p" }
-          ]
-        },
-        {
-          section: "hundred",
-          partLabel: "Part Two",
-          title: "The Hundred: the Credit standard",
-          blocks: [
-            { id: "p_hundred_1", type: "p" },
-            { id: "p_hundred_2", type: "p" },
-            { id: "p_hundred_3", type: "p" },
-            { id: "fig_hundred", type: "figure", icon: "🪵" },
-            { id: "p_hundred_4", type: "p" }
-          ]
-        },
-        {
-          section: "trans",
-          partLabel: "Part Three",
-          title: "The half-robot shipment: the transition to a dividend",
-          blocks: [
-            { id: "p_trans_1", type: "p" },
-            { id: "p_trans_2", type: "p" },
-            { id: "p_trans_3", type: "p" },
-            { id: "p_trans_4", type: "p" },
-            { id: "fig_trans", type: "figure", icon: "⚙️" },
-            { id: "p_trans_5", type: "p" }
-          ]
-        },
-        {
-          section: "auto",
-          partLabel: "Part Four",
-          title: "Full automation: the free colony",
-          blocks: [
-            { id: "p_auto_1", type: "p" },
-            { id: "p_auto_2", type: "p" },
-            { id: "fig_auto", type: "figure", icon: "🌱" },
-            { id: "p_auto_3", type: "p" },
-            { id: "quote_abundance", type: "quote" }
-          ]
-        },
-        {
-          section: "conclusion",
-          partLabel: "Conclusion",
-          title: "Updating the ledger",
-          blocks: [
-            { id: "p_conc_1", type: "p" },
-            { id: "p_conc_2", type: "p" },
-            { id: "p_conc_perpetual", type: "p" },
-            { id: "p_conc_scope", type: "p" }
-          ]
-        }
-      ];
-    }
-
+    return [
+      {
+        section: "scarcity",
+        title: "The scarcity illusion",
+        blocks: [
+          { id: "p_scarcity_1", type: "p" },
+          { id: "p_scarcity_2", type: "p" },
+          { id: "p_scarcity_3", type: "p" },
+          { id: "p_scarcity_4", type: "p" }
+        ]
+      },
+      {
+        section: "dozen",
+        partLabel: "Part One",
+        title: "The Dozen: pure abundance",
+        blocks: [
+          { id: "p_dozen_1", type: "p" },
+          { id: "p_dozen_2", type: "p" },
+          {
+            id: "img_dozen_pair",
+            type: "image-group",
+            layout: "pair",
+            images: [
+              { file: "dinner.jpeg" },
+              { file: "robotsarrive.jpeg" }
+            ]
+          },
+          { id: "p_dozen_3", type: "p" },
+          { id: "p_dozen_4", type: "p" },
+          { id: "p_dozen_5", type: "p" },
+          { id: "p_dozen_6", type: "p" }
+        ]
+      },
+      {
+        section: "hundred",
+        partLabel: "Part Two",
+        title: "The Hundred: the Credit standard",
+        blocks: [
+          { id: "p_hundred_1", type: "p" },
+          { id: "p_hundred_2", type: "p" },
+          { id: "p_hundred_3", type: "p" },
+          {
+            id: "img_hundred_pair",
+            type: "image-group",
+            layout: "pair",
+            images: [
+              { file: "sawmill.jpeg" },
+              { file: "market.jpeg" }
+            ]
+          },
+          { id: "p_hundred_4", type: "p" }
+        ]
+      },
+      {
+        section: "trans",
+        partLabel: "Part Three",
+        title: "The half-robot shipment: the transition to a dividend",
+        blocks: [
+          { id: "p_trans_1", type: "p" },
+          { id: "p_trans_2", type: "p" },
+          {
+            id: "img_trans_pair",
+            type: "image-group",
+            layout: "pair",
+            images: [
+              { file: "transition.jpeg" },
+              { file: "robotandcarpenter.jpeg" }
+            ]
+          },
+          { id: "p_trans_3", type: "p" },
+          { id: "p_trans_4", type: "p" },
+          { id: "p_trans_5", type: "p" }
+        ]
+      },
+      {
+        section: "auto",
+        partLabel: "Part Four",
+        title: "Full automation: the free colony",
+        blocks: [
+          { id: "p_auto_1", type: "p" },
+          { id: "p_auto_2", type: "p" },
+          { id: "p_auto_3", type: "p" },
+          { id: "quote_abundance", type: "quote" },
+          {
+            id: "img_bottom_four",
+            type: "image-group",
+            layout: "grid-4",
+            images: [
+              { file: "musicandart.jpeg" },
+              { file: "vehicle.jpeg" },
+              { file: "treehouses.jpeg" },
+              { file: "whimsicalhouse.jpeg" }
+            ]
+          }
+        ]
+      },
+      {
+        section: "conclusion",
+        partLabel: "Conclusion",
+        title: "Updating the ledger",
+        blocks: [
+          { id: "p_conc_1", type: "p" },
+          { id: "p_conc_2", type: "p" },
+          { id: "p_conc_perpetual", type: "p" },
+          { id: "p_conc_scope", type: "p" }
+        ]
+      }
+    ];
+  }
   static p_conc_perpetual() {
       return [
         "To minds trained in traditional economics, an unconditional dividend often sounds suspiciously like a perpetual motion machine—an attempt to conjure wealth out of nowhere, getting something for nothing. But that objection confuses being free of human sweat with being free of physical inputs. A perpetual motion machine is impossible because in a closed system you cannot extract more energy than you put in. An automated economy, however, is not a closed human loop: you have added a massive, tireless physical producer to the equation. Powered by sunlight and mineral fuel, autonomous harvesters, robotic mills, and AI networks do real physical work. Net of the energy, maintenance, and parts required to sustain the machines, they pour an outright surplus of physical goods into the colony every single day. The dividend is simply the accounting claim check on that surplus. It is not a free lunch; the machine paid for it in physical energy.",

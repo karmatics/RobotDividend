@@ -25,7 +25,7 @@ class RobotDividend {
   initUI() {
     this.container.innerHTML = "";
 
-    // Floating Navigation Bar
+    // Clean Navigation Bar (No gallery buttons or extra modals)
     this.navBar = makeElement("nav", { className: "reader-nav-bar" }, [
       ["div", { className: "reader-nav-brand" }, [
         ["span", {}, "⚡"],
@@ -66,7 +66,6 @@ class RobotDividend {
     this.shell.appendChild(this.articleContainer);
     this.container.appendChild(this.shell);
   }
-
   renderArticle() {
       this.articleContainer.innerHTML = "";
       const meta = ArticleContent.getMeta();
@@ -110,8 +109,29 @@ class RobotDividend {
         this.articleContainer.appendChild(secWrap);
       });
     }
+
   renderBlock(blockDef) {
     const blockId = blockDef.id;
+
+    // Single Image
+    if (blockDef.type === "image") {
+      const card = this.createThumbCard(blockDef.file);
+      return makeElement("div", { className: "image-single-wrap" }, [card]);
+    }
+
+    // Grouped Images (Side-by-Side Pairs or 4-at-Bottom Grid)
+    if (blockDef.type === "image-group") {
+      const isGrid4 = blockDef.layout === "grid-4";
+      const containerClass = isGrid4 ? "image-grid-four" : "image-row-pair";
+
+      const cards = (blockDef.images || []).map((imgDef) => {
+        return this.createThumbCard(imgDef.file);
+      });
+
+      return makeElement("div", { className: containerClass }, cards);
+    }
+
+    // Handle Text Blocks & Quotes with Numbered List Support
     const variants = (typeof ArticleContent[blockId] === "function") ? ArticleContent[blockId]() : ["[Missing block]"];
     const currentIdx = this.activeVariants[blockId] || 0;
     const currentText = variants[currentIdx] || variants[0];
@@ -122,20 +142,70 @@ class RobotDividend {
     });
 
     let contentEl;
-    if (blockDef.type === "figure") {
-      contentEl = makeElement("figure", { className: "block-figure" }, [
-        ["span", { className: "block-figure-icon" }, blockDef.icon || "📎"],
-        ["figcaption", { className: "block-figure-caption" }, currentText]
-      ]);
-    } else if (blockDef.type === "quote") {
+    if (blockDef.type === "quote") {
       contentEl = makeElement("blockquote", { className: "block-quote" }, currentText);
     } else {
-      contentEl = makeElement("p", { className: "block-p" }, currentText);
+      // Parse numbered lists (e.g., 1. ... 2. ... 3. ...) into actual HTML <ol> lists
+      if (/\n\d+\.\s/.test(currentText) || /^\d+\.\s/.test(currentText)) {
+        contentEl = makeElement("div", { className: "block-text-multi" });
+        const lines = currentText.split("\n");
+        let currentParagraph = [];
+        let currentList = null;
+
+        const flushParagraph = () => {
+          if (currentParagraph.length > 0) {
+            const pText = currentParagraph.join(" ").trim();
+            if (pText) {
+              contentEl.appendChild(makeElement("p", { className: "block-p" }, pText));
+            }
+            currentParagraph = [];
+          }
+        };
+
+        const flushList = () => {
+          if (currentList) {
+            contentEl.appendChild(currentList);
+            currentList = null;
+          }
+        };
+
+        lines.forEach((line) => {
+          const trimmed = line.trim();
+          if (!trimmed) {
+            flushParagraph();
+            flushList();
+            return;
+          }
+
+          const listMatch = trimmed.match(/^(\d+)\.\s+(.*)$/);
+          if (listMatch) {
+            flushParagraph();
+            if (!currentList) {
+              currentList = makeElement("ol", { className: "block-ol" });
+            }
+            currentList.appendChild(makeElement("li", {}, listMatch[2]));
+          } else {
+            flushList();
+            currentParagraph.push(trimmed);
+          }
+        });
+
+        flushParagraph();
+        flushList();
+      } else if (currentText.includes("\n\n")) {
+        contentEl = makeElement("div", { className: "block-text-multi" });
+        const parts = currentText.split(/\n\s*\n/).map((p) => p.trim()).filter(Boolean);
+        parts.forEach((p) => {
+          contentEl.appendChild(makeElement("p", { className: "block-p" }, p));
+        });
+      } else {
+        contentEl = makeElement("p", { className: "block-p" }, currentText);
+      }
     }
 
     wrapper.appendChild(contentEl);
 
-    // Subtle Gutter Controls: sits in the right margin so it adds ZERO vertical height
+    // Subtle Gutter Controls
     const gutterControls = makeElement("div", { className: "block-gutter-controls" });
 
     if (variants.length > 1) {
@@ -158,7 +228,7 @@ class RobotDividend {
       gutterControls.appendChild(vCol);
     }
 
-    // Edit studio popup trigger
+    // Edit studio trigger
     const inspectBtn = makeElement("button", {
       className: "gutter-inspect-btn",
       title: `Edit & AI studio for #${blockId}`,
@@ -169,7 +239,6 @@ class RobotDividend {
     }, "✎");
     gutterControls.appendChild(inspectBtn);
 
-    // Monospace method anchor tooltip visible strictly on hovering the gutter controls
     const idTip = makeElement("span", {
       className: "gutter-id-tip"
     }, `#${blockId}`);
@@ -371,14 +440,49 @@ static ${blockId}() {
       }
 
       sec.blocks.forEach((b) => {
+        if (b.type === "image") {
+          htmlParts.push(`<p><em>[Illustration: ${b.file}]</em></p>`);
+          return;
+        }
+        if (b.type === "image-group") {
+          const fileList = (b.images || []).map((img) => img.file).join(", ");
+          htmlParts.push(`<p><em>[Illustrations: ${fileList}]</em></p>`);
+          return;
+        }
+
         const variants = (typeof ArticleContent[b.id] === "function") ? ArticleContent[b.id]() : [];
         const idx = this.activeVariants[b.id] || 0;
         const text = variants[idx] || variants[0] || "";
 
         if (b.type === "quote") {
           htmlParts.push(`<blockquote><p>${text}</p></blockquote>`);
-        } else if (b.type === "figure") {
-          htmlParts.push(`<p><strong>[${b.icon || "Figure"}: ${text}]</strong></p>`);
+        } else if (/\n\d+\.\s/.test(text) || /^\d+\.\s/.test(text)) {
+          // Output clean <ol> for Quora rich-text paste
+          const lines = text.split("\n");
+          let inList = false;
+          lines.forEach((l) => {
+            const trimmed = l.trim();
+            if (!trimmed) return;
+            const m = trimmed.match(/^\d+\.\s+(.*)$/);
+            if (m) {
+              if (!inList) {
+                htmlParts.push("<ol>");
+                inList = true;
+              }
+              htmlParts.push(`<li>${m[1]}</li>`);
+            } else {
+              if (inList) {
+                htmlParts.push("</ol>");
+                inList = false;
+              }
+              htmlParts.push(`<p>${trimmed}</p>`);
+            }
+          });
+          if (inList) htmlParts.push("</ol>");
+        } else if (text.includes("\n\n")) {
+          text.split(/\n\s*\n/).forEach((p) => {
+            htmlParts.push(`<p>${p.trim()}</p>`);
+          });
         } else {
           htmlParts.push(`<p>${text}</p>`);
         }
@@ -387,13 +491,13 @@ static ${blockId}() {
 
     const simpleHtml = htmlParts.join("\n");
 
-    // Create plain text fallback
     const plainText = simpleHtml
       .replace(/<h2>(.*?)<\/h2>/g, "$1\n\n")
       .replace(/<h3>(.*?)<\/h3>/g, "$1\n\n")
       .replace(/<blockquote><p>(.*?)<\/p><\/blockquote>/g, "> $1\n\n")
+      .replace(/<ol>(.*?)<\/ol>/gs, "$1\n")
+      .replace(/<li>(.*?)<\/li>/g, "• $1\n")
       .replace(/<p><em>(.*?)<\/em><\/p>/g, "$1\n\n")
-      .replace(/<p><strong>(.*?)<\/strong><\/p>/g, "$1\n\n")
       .replace(/<p>(.*?)<\/p>/g, "$1\n\n");
 
     let showingCode = false;
@@ -451,7 +555,7 @@ static ${blockId}() {
 
     const dialogContent = makeElement("div", { className: "export-container" }, [
       ["p", { className: "export-desc" }, 
-        "Formatted with basic HTML headers, italics, and blockquotes compatible with Quora's rich-text editor. Click 'Copy for Quora' and press Ctrl+V / Cmd+V directly into Quora."
+        "Formatted with basic HTML headers, numbered lists, italics, and blockquotes compatible with Quora's rich-text editor. Click 'Copy for Quora' and press Ctrl+V / Cmd+V directly into Quora."
       ],
       ["div", { className: "export-view-container" }, [
         previewBox,
@@ -471,7 +575,6 @@ static ${blockId}() {
       contentElement: dialogContent
     });
   }
-
   _fallbackCopy(text, btn) {
     navigator.clipboard.writeText(text).then(() => {
       if (btn) {
@@ -479,6 +582,96 @@ static ${blockId}() {
         setTimeout(() => { btn.textContent = "📋 Copy for Quora (Direct Paste)"; }, 2500);
       }
     });
+  }
+
+  createThumbCard(fileName) {
+    const thumbPath = `images/thumbs/${fileName}`;
+    const fullPath = `images/${fileName}`;
+
+    const card = makeElement("div", {
+      className: "thumb-card",
+      title: "Click to expand image"
+    });
+
+    const img = makeElement("img", {
+      className: "thumb-img",
+      loading: "lazy",
+      decoding: "async",
+      src: thumbPath
+    });
+
+    // Automated graceful fallback: if images/thumbs/ doesn't exist yet or extension is .jpg
+    img.onerror = () => {
+      if (img.src.indexOf("/thumbs/") !== -1) {
+        img.src = fullPath;
+      } else if (img.src.endsWith(".jpeg")) {
+        img.src = img.src.replace(/\.jpeg$/, ".jpg");
+      } else if (img.src.endsWith(".jpg")) {
+        img.src = img.src.replace(/\.jpg$/, ".jpeg");
+      }
+    };
+
+    card.addEventListener("click", (e) => {
+      e.stopPropagation();
+      this.showLargePopout(fullPath);
+    });
+
+    card.appendChild(img);
+    return card;
+  }
+
+  showLargePopout(imagePath) {
+    // Remove any existing popout
+    const existing = document.querySelector(".popout-large-frame");
+    if (existing) existing.remove();
+
+    const frame = makeElement("div", {
+      className: "popout-large-frame",
+      title: "Click anywhere on image to close"
+    });
+
+    const img = makeElement("img", {
+      className: "popout-large-img",
+      src: imagePath
+    });
+
+    img.onerror = () => {
+      if (img.src.endsWith(".jpeg")) {
+        img.src = img.src.replace(/\.jpeg$/, ".jpg");
+      }
+    };
+
+    frame.appendChild(img);
+    document.body.appendChild(frame);
+
+    requestAnimationFrame(() => frame.classList.add("visible"));
+
+    const closePopout = () => {
+      frame.classList.remove("visible");
+      setTimeout(() => frame.remove(), 190);
+      window.removeEventListener("keydown", keyHandler);
+      window.removeEventListener("click", outsideClickHandler);
+    };
+
+    const keyHandler = (e) => {
+      if (e.key === "Escape") closePopout();
+    };
+
+    const outsideClickHandler = (e) => {
+      if (!frame.contains(e.target)) {
+        closePopout();
+      }
+    };
+
+    frame.addEventListener("click", (e) => {
+      e.stopPropagation();
+      closePopout();
+    });
+
+    window.addEventListener("keydown", keyHandler);
+    setTimeout(() => {
+      window.addEventListener("click", outsideClickHandler);
+    }, 50);
   }
 }
 
